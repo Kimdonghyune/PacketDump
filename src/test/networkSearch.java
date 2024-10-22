@@ -22,10 +22,10 @@ import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
 
 public class networkSearch extends Thread{
-    //16Áø¼ö¸¦ ¾Æ½ºÅ°ÄÚµå·Î º¯È¯
+    //16ì§„ìˆ˜ë¥¼ ì•„ìŠ¤í‚¤ì½”ë“œë¡œ ë³€í™˜
 	private static String hexToAscii(String hexString) {
 		StringBuilder output = new StringBuilder();
-		//16Áø¼ö·Î ¸¸µé±â À§ÇØ 2°³¾¿ ¹®ÀÚ¿­ ºĞÇÒÇÏ¿© ÇØ´ç ¹®ÀÚ·Î ¾Æ½ºÅ° º¯È¯
+		//16ì§„ìˆ˜ë¡œ ë§Œë“¤ê¸° ìœ„í•´ 2ê°œì”© ë¬¸ìì—´ ë¶„í• í•˜ì—¬ í•´ë‹¹ ë¬¸ìë¡œ ì•„ìŠ¤í‚¤ ë³€í™˜
 		for(int i = 0; i < hexString.length(); i += 2) {
 			String hexValue = hexString.substring(i, i + 2);
 			int decimalValue = Integer.parseInt(hexValue, 16);
@@ -42,80 +42,80 @@ public class networkSearch extends Thread{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		//³×Æ®¿öÅ© Àåºñ¸¦ ÀúÀåÇÏ´Â °ø°£À» ÇÒ´ç
+		//ë„¤íŠ¸ì›Œí¬ ì¥ë¹„ë¥¼ ì €ì¥í•˜ëŠ” ê³µê°„ì„ í• ë‹¹
     	ArrayList<PcapIf> allDevs = new ArrayList<PcapIf>();
-    	//¿À·ù ¸Ş¼¼Áö¸¦ ´ã´Â ¹öÆÛ
+    	//ì˜¤ë¥˜ ë©”ì„¸ì§€ë¥¼ ë‹´ëŠ” ë²„í¼
     	StringBuilder errbuf = new StringBuilder();
     	
     	int smtp = 587;
     	
-    	//³×Æ®¿öÅ© Àåºñ¸¦ Ã£¾Æ¼­ ÀúÀå, ³×Æ®¿öÅ© Àåºñ¸¦ ¸øÃ£À¸¸é returnÇÏ¿© Á¾·á
+    	//ë„¤íŠ¸ì›Œí¬ ì¥ë¹„ë¥¼ ì°¾ì•„ì„œ ì €ì¥, ë„¤íŠ¸ì›Œí¬ ì¥ë¹„ë¥¼ ëª»ì°¾ìœ¼ë©´ returní•˜ì—¬ ì¢…ë£Œ
     	Pcap.findAllDevs(allDevs, errbuf);
     	if(allDevs.isEmpty()) {
-    		System.out.println("³×Æ®¿öÅ© ÀåÄ¡¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. ¿À·ù : " + errbuf.toString());
+    		System.out.println("ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì˜¤ë¥˜ : " + errbuf.toString());
     		return;
     	}
-    	System.out.println("[ ³×Æ®¿öÅ© Àåºñ Å½»ö ¼º°ø ]");
+    	System.out.println("[ ë„¤íŠ¸ì›Œí¬ ì¥ë¹„ íƒìƒ‰ ì„±ê³µ ]");
     	
-    	//Ã£Àº Àåºñ¸¦ ÇÏ³ª¾¿ µ¹¸é¼­ Á¤º¸ Ãâ·Â
+    	//ì°¾ì€ ì¥ë¹„ë¥¼ í•˜ë‚˜ì”© ëŒë©´ì„œ ì •ë³´ ì¶œë ¥
     	for(int i = 0; i<allDevs.size(); i++) {
     		PcapIf device = allDevs.get(i);
-    		String description = (device.getDescription() != null) ? device.getDescription() : "Àåºñ¿¡ ´ëÇÑ ¼³¸íÀÌ ¾ø½À´Ï´Ù.";
-    		System.out.printf("[%d¹ø] : %s [%s]\n", i, device.getName(), description);
+    		String description = (device.getDescription() != null) ? device.getDescription() : "ì¥ë¹„ì— ëŒ€í•œ ì„¤ëª…ì´ ì—†ìŠµë‹ˆë‹¤.";
+    		System.out.printf("[%dë²ˆ] : %s [%s]\n", i, device.getName(), description);
     	}
     	
-    	//³×Æ®¿öÅ© ÀåÄ¡ Áß¿¡¼­ ÇÏ³ª¸¦ ¼±ÅÃ (4¹ø ¼±ÅÃ : ÀÌ´õ³İ)
+    	//ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜ ì¤‘ì—ì„œ í•˜ë‚˜ë¥¼ ì„ íƒ (4ë²ˆ ì„ íƒ : ì´ë”ë„·)
     	PcapIf device = allDevs.get(4);
-    	System.out.printf("¼±ÅÃµÈ ÀåÄ¡ %s \n", (device.getDescription() != null) ? device.getDescription() : device.getName());
+    	System.out.printf("ì„ íƒëœ ì¥ì¹˜ %s \n", (device.getDescription() != null) ? device.getDescription() : device.getName());
     	
-    	//65536¹ÙÀÌÆ® ¸¸Å­ ÆĞÅ¶ Ä¸Ã³
+    	//65536ë°”ì´íŠ¸ ë§Œí¼ íŒ¨í‚· ìº¡ì²˜
     	int snaplen = 64 * 1024;
     	
-    	//ÇÁ¶ó¹Ì½ºÄí¾î½º ¸ğµå·Î ¼³Á¤ - ÇØ´ç ³×Æ®¿öÅ© ÀåÄ¡·Î µé¾î¿À´Â ¸ğµç ÆĞÅ¶ Ä¸Ã³ÇÏ´Â ¸ğµå
+    	//í”„ë¼ë¯¸ìŠ¤ì¿ ì–´ìŠ¤ ëª¨ë“œë¡œ ì„¤ì • - í•´ë‹¹ ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜ë¡œ ë“¤ì–´ì˜¤ëŠ” ëª¨ë“  íŒ¨í‚· ìº¡ì²˜í•˜ëŠ” ëª¨ë“œ
     	int flags = Pcap.MODE_PROMISCUOUS;
     	
-    	//Å¸ÀÓ ¾Æ¿ôÀ» 30ÃÊ·Î ¼³Á¤
+    	//íƒ€ì„ ì•„ì›ƒì„ 30ì´ˆë¡œ ì„¤ì •
     	int timeout = 30 * 1000;
     	
-    	//ÀåÄ¡ÀÇ ÆĞÅ¶ Ä¸Ã³¸¦ È°¼ºÈ­ÇÕ´Ï´Ù
+    	//ì¥ì¹˜ì˜ íŒ¨í‚· ìº¡ì²˜ë¥¼ í™œì„±í™”í•©ë‹ˆë‹¤
     	Pcap pcap = Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);
     	
-    	//Pcap °´Ã¼°¡ »ı¼ºµÇÁö ¾ÊÀ¸¸é ¿À·ù ¸Ş¼¼Áö ¹ß»ı
+    	//Pcap ê°ì²´ê°€ ìƒì„±ë˜ì§€ ì•Šìœ¼ë©´ ì˜¤ë¥˜ ë©”ì„¸ì§€ ë°œìƒ
     	if(pcap == null) {
-    		System.out.println("ÆĞÅ¶ Ä¸Ã³¸¦ À§ÇØ ³×Æ®¿öÅ© ÀåÄ¡¸¦ ¿©´Âµ¥ ½ÇÆĞ ¿À·ù: " + errbuf.toString());
+    		System.out.println("íŒ¨í‚· ìº¡ì²˜ë¥¼ ìœ„í•´ ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜ë¥¼ ì—¬ëŠ”ë° ì‹¤íŒ¨ ì˜¤ë¥˜: " + errbuf.toString());
     		return;
     	}
     	
-    	//IP ÁÖ¼Ò °´Ã¼ »ı¼º
+    	//IP ì£¼ì†Œ ê°ì²´ ìƒì„±
     	Ip4 ip = new Ip4();
     	
-    	//TCP ÁÖ¼Ò °´Ã¼ »ı¼º
+    	//TCP ì£¼ì†Œ ê°ì²´ ìƒì„±
     	Tcp tcp = new Tcp();
     	
-    	//Ä¸Ã³ÇÑ ÆĞÅ¶ÀÇ Çì´õ °´Ã¼ »ı¼º
+    	//ìº¡ì²˜í•œ íŒ¨í‚·ì˜ í—¤ë” ê°ì²´ ìƒì„±
     	PcapHeader header = new PcapHeader(JMemory.POINTER);
     	
-    	//ÆĞÅ¶ °ü·Ã ¹öÆÛ »ı¼º
+    	//íŒ¨í‚· ê´€ë ¨ ë²„í¼ ìƒì„±
     	JBuffer buf = new JBuffer(JMemory.POINTER);
     	
-    	//PCAPÀÇ µ¥ÀÌÅÍ ¸µÅ© Å¸ÀÔÀ» JnetPcapÀÇ ÇÁ·ÎÅäÄİ ID°ªÀ¸·Î ¸ÅÇÎ
+    	//PCAPì˜ ë°ì´í„° ë§í¬ íƒ€ì…ì„ JnetPcapì˜ í”„ë¡œí† ì½œ IDê°’ìœ¼ë¡œ ë§¤í•‘
     	int id = JRegistry.mapDLTToId(pcap.datalink());
     	
-    	//½Ã°£ Çü½Ä ¼³Á¤
+    	//ì‹œê°„ í˜•ì‹ ì„¤ì •
     	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     	
-    	String filePath = "C:\\data\\SMTP_Packet_Dump.txt";//ÇØ´ç À§Ä¡¿¡ ÇØ´ç ÆÄÀÏ¸íÀ¸·Î ÆÄÀÏ »ı¼º
-        File file = new File(filePath); //File°´Ã¼ »ı¼º
-        if(!file.exists()){ //ÆÄÀÏÀÌ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é
+    	String filePath = "C:\\data\\SMTP_Packet_Dump.txt";//í•´ë‹¹ ìœ„ì¹˜ì— í•´ë‹¹ íŒŒì¼ëª…ìœ¼ë¡œ íŒŒì¼ ìƒì„±
+        File file = new File(filePath); //Fileê°ì²´ ìƒì„±
+        if(!file.exists()){ //íŒŒì¼ì´ ì¡´ì¬í•˜ì§€ ì•Šìœ¼ë©´
             try {
 				file.createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} //½Å±Ô»ı¼º
+			} //ì‹ ê·œìƒì„±
         }
 
-        // BufferedWriter »ı¼º
+        // BufferedWriter ìƒì„±
         BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(file, false));
@@ -126,59 +126,59 @@ public class networkSearch extends Thread{
         StringBuffer result = new StringBuffer();
 		
         
-    	System.out.println("SMTP Æ÷Æ® "+ smtp + " ½ºÄµ ½ÃÀÛ");
-    	//¿À·ù°¡ ¹ß»ıÇÏÁö ¾Ê´Â ÇÑ °è¼ÓÇØ¼­ ´ÙÀ½ ÆĞÅ¶À» ÀÔ·Â¹ŞÀ½
+    	System.out.println("SMTP í¬íŠ¸ "+ smtp + " ìŠ¤ìº” ì‹œì‘");
+    	//ì˜¤ë¥˜ê°€ ë°œìƒí•˜ì§€ ì•ŠëŠ” í•œ ê³„ì†í•´ì„œ ë‹¤ìŒ íŒ¨í‚·ì„ ì…ë ¥ë°›ìŒ
     	while(pcap.nextEx(header, buf) == Pcap.NEXT_EX_OK) {
     		PcapPacket packet = new PcapPacket(header, buf);
     		packet.scan(id);
-    		// TCP(Æ÷Æ®¹øÈ£)°¡ 587ÀÌ¸é SMTP
+    		// TCP(í¬íŠ¸ë²ˆí˜¸)ê°€ 587ì´ë©´ SMTP
     		if(packet.hasHeader(tcp)) {
-    			byte[] compare_payloadData = tcp.getPayload();//TCP¿¡ ÀÖ´Â payload °ª °¡Á®¿È(¹ÙÀÌÆ® ÇüÅÂ)
-    			String compare_payload = DatatypeConverter.printHexBinary(compare_payloadData);//¹ÙÀÌÆ®ÇüÅÂ¸¦ ¹®ÀÚ¿­Çü½ÄÀ¸·Î º¯È¯
-    			String asciiCode = hexToAscii(compare_payload);//16Áø¼ö¸¦ ¾Æ½ºÅ° ÄÚµå·Î º¯È¯
+    			byte[] compare_payloadData = tcp.getPayload();//TCPì— ìˆëŠ” payload ê°’ ê°€ì ¸ì˜´(ë°”ì´íŠ¸ í˜•íƒœ)
+    			String compare_payload = DatatypeConverter.printHexBinary(compare_payloadData);//ë°”ì´íŠ¸í˜•íƒœë¥¼ ë¬¸ìì—´í˜•ì‹ìœ¼ë¡œ ë³€í™˜
+    			String asciiCode = hexToAscii(compare_payload);//16ì§„ìˆ˜ë¥¼ ì•„ìŠ¤í‚¤ ì½”ë“œë¡œ ë³€í™˜
     			
         		if((tcp.source() == smtp || tcp.destination() == smtp) && asciiCode.length() != 0) {
         			System.out.println("-------------");
         			Date date = new Date(packet.getCaptureHeader().timestampInMillis());
         			String nowTime1 = sdf1.format(date);
 
-        			//ÆĞÅ¶ÀÇ Çì´õ¿¡¼­ IP ºÎºĞ¸¸ ÃßÃâ
+        			//íŒ¨í‚·ì˜ í—¤ë”ì—ì„œ IP ë¶€ë¶„ë§Œ ì¶”ì¶œ
             		if(packet.hasHeader(ip)) {
             			if(tcp.destination() == smtp && FormatUtils.ip(ip.source()).equals("10.10.10.84")) {
             				result.append("============\n");
             				result.append("SMEX -> SMTP\n");
             				System.out.println("SMEX -> SMTP");
-            				result.append("½Ã°£ = " + nowTime1 + "\n");
-            				result.append("Ãâ¹ßÁö IP ÁÖ¼Ò = " + FormatUtils.ip(ip.source()) + "\nµµÂøÁö IP ÁÖ¼Ò  = " + FormatUtils.ip(ip.destination()) + "\n");
+            				result.append("ì‹œê°„ = " + nowTime1 + "\n");
+            				result.append("ì¶œë°œì§€ IP ì£¼ì†Œ = " + FormatUtils.ip(ip.source()) + "\në„ì°©ì§€ IP ì£¼ì†Œ  = " + FormatUtils.ip(ip.destination()) + "\n");
             			}
             			else if(tcp.source() == smtp && FormatUtils.ip(ip.destination()).equals("10.10.10.84")) {
             				result.append("============\n");
             				result.append("SMTP -> SMEX\n");
             				System.out.println("SMTP -> SMEX");
-            				result.append("½Ã°£ = " + nowTime1 + "\n");
-            				result.append("Ãâ¹ßÁö IP ÁÖ¼Ò = " + FormatUtils.ip(ip.source()) + "\nµµÂøÁö IP ÁÖ¼Ò  = " + FormatUtils.ip(ip.destination()) + "\n");
+            				result.append("ì‹œê°„ = " + nowTime1 + "\n");
+            				result.append("ì¶œë°œì§€ IP ì£¼ì†Œ = " + FormatUtils.ip(ip.source()) + "\në„ì°©ì§€ IP ì£¼ì†Œ  = " + FormatUtils.ip(ip.destination()) + "\n");
             			}
-            			System.out.printf("Ãâ¹ßÁö IP ÁÖ¼Ò = %s \nµµÂøÁö IP ÁÖ¼Ò = %s\n", FormatUtils.ip(ip.source()), FormatUtils.ip(ip.destination()));
+            			System.out.printf("ì¶œë°œì§€ IP ì£¼ì†Œ = %s \në„ì°©ì§€ IP ì£¼ì†Œ = %s\n", FormatUtils.ip(ip.source()), FormatUtils.ip(ip.destination()));
             		}
-            		System.out.println("½Ã°£: " + nowTime1);
+            		System.out.println("ì‹œê°„: " + nowTime1);
 
-            		//ÆĞÅ¶ÀÇ Çì´õ¿¡¼­ TCP ºÎºĞ¸¸ ÃßÃâ(Æ÷Æ® ¹øÈ£)
-            		System.out.printf("Ãâ¹ßÁö TCP ÁÖ¼Ò = %s \nµµÂøÁö TCP ÁÖ¼Ò = %s\n", tcp.source(), tcp.destination());
-            		result.append("Ãâ¹ßÁö TCP ÁÖ¼Ò = " + tcp.source() + "\nµµÂøÁö TCP ÁÖ¼Ò = " + tcp.destination() + "\n");
+            		//íŒ¨í‚·ì˜ í—¤ë”ì—ì„œ TCP ë¶€ë¶„ë§Œ ì¶”ì¶œ(í¬íŠ¸ ë²ˆí˜¸)
+            		System.out.printf("ì¶œë°œì§€ TCP ì£¼ì†Œ = %s \në„ì°©ì§€ TCP ì£¼ì†Œ = %s\n", tcp.source(), tcp.destination());
+            		result.append("ì¶œë°œì§€ TCP ì£¼ì†Œ = " + tcp.source() + "\në„ì°©ì§€ TCP ì£¼ì†Œ = " + tcp.destination() + "\n");
  
-            		//packet.hasHeader(payload) ->ÀÌ ¹æ½ÄÀº packetÀÇ Çì´õÁ¤º¸¿¡¼­ payload°¡ ÀÖ´ÂÁö ¿©ºÎ¸¦ È®ÀÎÇÏ´Â ¸Ş¼Òµå·Î µû·Î payload°¡ ¾ÈÀâÈû(tcpÀÇ payload¿¡¼­ °¡Á®¿Í¾ßÇÔ)
+            		//packet.hasHeader(payload) ->ì´ ë°©ì‹ì€ packetì˜ í—¤ë”ì •ë³´ì—ì„œ payloadê°€ ìˆëŠ”ì§€ ì—¬ë¶€ë¥¼ í™•ì¸í•˜ëŠ” ë©”ì†Œë“œë¡œ ë”°ë¡œ payloadê°€ ì•ˆì¡í˜(tcpì˜ payloadì—ì„œ ê°€ì ¸ì™€ì•¼í•¨)
             		
-        			byte[] tcp_payloadData = tcp.getPayload();//TCP¿¡ ÀÖ´Â payload °ª °¡Á®¿È(¹ÙÀÌÆ® ÇüÅÂ)
-        			String payloadData = DatatypeConverter.printHexBinary(tcp_payloadData);//¹ÙÀÌÆ®ÇüÅÂ¸¦ ¹®ÀÚ¿­Çü½ÄÀ¸·Î º¯È¯
-        			String asciiString = hexToAscii(payloadData);//16Áø¼ö¸¦ ¾Æ½ºÅ° ÄÚµå·Î º¯È¯
-        			System.out.println("µ¥ÀÌÅÍ : " + asciiString + "\n");
+        			byte[] tcp_payloadData = tcp.getPayload();//TCPì— ìˆëŠ” payload ê°’ ê°€ì ¸ì˜´(ë°”ì´íŠ¸ í˜•íƒœ)
+        			String payloadData = DatatypeConverter.printHexBinary(tcp_payloadData);//ë°”ì´íŠ¸í˜•íƒœë¥¼ ë¬¸ìì—´í˜•ì‹ìœ¼ë¡œ ë³€í™˜
+        			String asciiString = hexToAscii(payloadData);//16ì§„ìˆ˜ë¥¼ ì•„ìŠ¤í‚¤ ì½”ë“œë¡œ ë³€í™˜
+        			System.out.println("ë°ì´í„° : " + asciiString + "\n");
         			if(tcp.getPayload() != null) {
-        				result.append("µ¥ÀÌÅÍ : " + asciiString + "\n");
+        				result.append("ë°ì´í„° : " + asciiString + "\n");
         			}
 
                 	try {
 						writer.write(result.toString());
-						writer.flush(); //¹öÆÛÀÇ ³²Àº µ¥ÀÌÅÍ¸¦ ¸ğµÎ ¾²±â
+						writer.flush(); //ë²„í¼ì˜ ë‚¨ì€ ë°ì´í„°ë¥¼ ëª¨ë‘ ì“°ê¸°
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -188,13 +188,13 @@ public class networkSearch extends Thread{
         		}
     		}
     	}
-    	pcap.close();//ÆĞÅ¶ Ä¸Ã³ Á¾·á
-    	System.out.println("SMTP Æ÷Æ® 587 ½ºÄµ Á¾·á");
+    	pcap.close();//íŒ¨í‚· ìº¡ì²˜ ì¢…ë£Œ
+    	System.out.println("SMTP í¬íŠ¸ 587 ìŠ¤ìº” ì¢…ë£Œ");
     	System.out.println(result.toString());
     	try {
 			writer.write(result.toString());
-	        writer.flush(); //¹öÆÛÀÇ ³²Àº µ¥ÀÌÅÍ¸¦ ¸ğµÎ ¾²±â
-	        writer.close(); //½ºÆ®¸² Á¾·á
+	        writer.flush(); //ë²„í¼ì˜ ë‚¨ì€ ë°ì´í„°ë¥¼ ëª¨ë‘ ì“°ê¸°
+	        writer.close(); //ìŠ¤íŠ¸ë¦¼ ì¢…ë£Œ
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

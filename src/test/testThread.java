@@ -1,5 +1,6 @@
 package test;
 
+//UTF-8ë¡œ ë³€ê²½ ì™„ë£Œ
 public class testThread {
 
 	public static void main(String[] args) throws InterruptedException {
@@ -9,14 +10,12 @@ public class testThread {
 		nt.start();
 		
 		if(lt != null) {
-			lt.join(); // ·ÎÄÃ ³×Æ®¿öÅ© ÆĞÅ¶ Ä¸Ã³°¡ timeoutµÉ ¶§±îÁö ´ë±â
+			lt.join(); // ë¡œì»¬ ë„¤íŠ¸ì›Œí¬ íŒ¨í‚· ìº¡ì²˜ê°€ timeoutë  ë•Œê¹Œì§€ ëŒ€ê¸°
 		}
 		
 		if(nt != null) {
-			nt.stopThread(); // ÇØ´ç ³×Æ®¿öÅ© ÆĞÅ¶ Ä¸Ã³ Á¾·á
+			nt.stopThread(); // í•´ë‹¹ ë„¤íŠ¸ì›Œí¬ íŒ¨í‚· ìº¡ì²˜ ì¢…ë£Œ
 		}
 	}
 
 }
-
-
