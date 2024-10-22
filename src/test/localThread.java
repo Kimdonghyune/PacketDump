@@ -23,10 +23,10 @@ import org.jnetpcap.protocol.tcpip.Tcp;
 
 public class localThread extends Thread {
 	
-	// 16Áø¼ö¸¦ ¾Æ½ºÅ°ÄÚµå·Î º¯È¯
+	// 16ì§„ìˆ˜ë¥¼ ì•„ìŠ¤í‚¤ì½”ë“œë¡œ ë³€í™˜
 	private String hexToAscii(String hexString) {
 		StringBuilder output = new StringBuilder();
-		// 16Áø¼ö·Î ¸¸µé±â À§ÇØ 2°³¾¿ ¹®ÀÚ¿­ ºĞÇÒÇÏ¿© ÇØ´ç ¹®ÀÚ·Î ¾Æ½ºÅ° º¯È¯
+		// 16ì§„ìˆ˜ë¡œ ë§Œë“¤ê¸° ìœ„í•´ 2ê°œì”© ë¬¸ìì—´ ë¶„í• í•˜ì—¬ í•´ë‹¹ ë¬¸ìë¡œ ì•„ìŠ¤í‚¤ ë³€í™˜
 		for (int i = 0; i < hexString.length(); i += 2) {
 			String hexValue = hexString.substring(i, i + 2);
 			int decimalValue = Integer.parseInt(hexValue, 16);
@@ -36,75 +36,75 @@ public class localThread extends Thread {
 	}
 
 	public void run() {
-		// ³×Æ®¿öÅ© Àåºñ¸¦ ÀúÀåÇÏ´Â °ø°£À» ÇÒ´ç
+		// ë„¤íŠ¸ì›Œí¬ ì¥ë¹„ë¥¼ ì €ì¥í•˜ëŠ” ê³µê°„ì„ í• ë‹¹
 		ArrayList<PcapIf> allDevs = new ArrayList<PcapIf>();
-		// ¿À·ù ¸Ş¼¼Áö¸¦ ´ã´Â ¹öÆÛ
+		// ì˜¤ë¥˜ ë©”ì„¸ì§€ë¥¼ ë‹´ëŠ” ë²„í¼
 		StringBuilder errbuf = new StringBuilder();
 
-		int searchPort = 25; //Æ÷Æ® ¹øÈ£ 25¹øÀ¸·Î ¼³Á¤(ÇÊÅÍ¼³Á¤)
+		int searchPort = 25; //í¬íŠ¸ ë²ˆí˜¸ 25ë²ˆìœ¼ë¡œ ì„¤ì •(í•„í„°ì„¤ì •)
 
-		// ³×Æ®¿öÅ© Àåºñ¸¦ Ã£¾Æ¼­ ÀúÀå, ³×Æ®¿öÅ© Àåºñ¸¦ ¸øÃ£À¸¸é returnÇÏ¿© Á¾·á
+		// ë„¤íŠ¸ì›Œí¬ ì¥ë¹„ë¥¼ ì°¾ì•„ì„œ ì €ì¥, ë„¤íŠ¸ì›Œí¬ ì¥ë¹„ë¥¼ ëª»ì°¾ìœ¼ë©´ returní•˜ì—¬ ì¢…ë£Œ
 		Pcap.findAllDevs(allDevs, errbuf);
 		if (allDevs.isEmpty()) {
-			System.out.println("³×Æ®¿öÅ© ÀåÄ¡¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. ¿À·ù : " + errbuf.toString());
+			System.out.println("ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì˜¤ë¥˜ : " + errbuf.toString());
 			return;
 		}
-		System.out.println("[ ³×Æ®¿öÅ© Àåºñ Å½»ö ¼º°ø ]");
+		System.out.println("[ ë„¤íŠ¸ì›Œí¬ ì¥ë¹„ íƒìƒ‰ ì„±ê³µ ]");
 
-		// Ã£Àº Àåºñ¸¦ ÇÏ³ª¾¿ µ¹¸é¼­ Á¤º¸ Ãâ·Â
+		// ì°¾ì€ ì¥ë¹„ë¥¼ í•˜ë‚˜ì”© ëŒë©´ì„œ ì •ë³´ ì¶œë ¥
 		for (int i = 0; i < allDevs.size(); i++) {
 			PcapIf device = allDevs.get(i);
-			String description = (device.getDescription() != null) ? device.getDescription() : "Àåºñ¿¡ ´ëÇÑ ¼³¸íÀÌ ¾ø½À´Ï´Ù.";
-			System.out.printf("[%d¹ø] : %s [%s]\n", i, device.getName(), description);
+			String description = (device.getDescription() != null) ? device.getDescription() : "ì¥ë¹„ì— ëŒ€í•œ ì„¤ëª…ì´ ì—†ìŠµë‹ˆë‹¤.";
+			System.out.printf("[%dë²ˆ] : %s [%s]\n", i, device.getName(), description);
 		}
 
-		// ³×Æ®¿öÅ© ÀåÄ¡ Áß¿¡¼­ ÇÏ³ª¸¦ ¼±ÅÃ (0¹ø ¼±ÅÃ : ·ÎÄÃ ³×Æ®¿öÅ© ÀåÄ¡)
+		// ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜ ì¤‘ì—ì„œ í•˜ë‚˜ë¥¼ ì„ íƒ (0ë²ˆ ì„ íƒ : ë¡œì»¬ ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜)
 		PcapIf device = allDevs.get(0);
-		System.out.printf("¼±ÅÃµÈ ÀåÄ¡ %s \n",
+		System.out.printf("ì„ íƒëœ ì¥ì¹˜ %s \n",
 				(device.getDescription() != null) ? device.getDescription() : device.getName());
 
-		// 65536¹ÙÀÌÆ® ¸¸Å­ ÆĞÅ¶ Ä¸Ã³
+		// 65536ë°”ì´íŠ¸ ë§Œí¼ íŒ¨í‚· ìº¡ì²˜
 		int snaplen = 64 * 1024;
 
-		// ÇÁ¶ó¹Ì½ºÄí¾î½º ¸ğµå·Î ¼³Á¤ - ÇØ´ç ³×Æ®¿öÅ© ÀåÄ¡·Î µé¾î¿À´Â ¸ğµç ÆĞÅ¶ Ä¸Ã³ÇÏ´Â ¸ğµå
+		// í”„ë¼ë¯¸ìŠ¤ì¿ ì–´ìŠ¤ ëª¨ë“œë¡œ ì„¤ì • - í•´ë‹¹ ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜ë¡œ ë“¤ì–´ì˜¤ëŠ” ëª¨ë“  íŒ¨í‚· ìº¡ì²˜í•˜ëŠ” ëª¨ë“œ
 		int flags = Pcap.MODE_PROMISCUOUS;
 
-		// Å¸ÀÓ ¾Æ¿ôÀ» 20ÃÊ·Î ¼³Á¤ (ÆĞÅ¶ÀÌ 20ÃÊµ¿¾È µé¾î¿ÀÁö ¾Ê´Â´Ù¸é °­Á¦ Á¾·á )
+		// íƒ€ì„ ì•„ì›ƒì„ 20ì´ˆë¡œ ì„¤ì • (íŒ¨í‚·ì´ 20ì´ˆë™ì•ˆ ë“¤ì–´ì˜¤ì§€ ì•ŠëŠ”ë‹¤ë©´ ê°•ì œ ì¢…ë£Œ )
 		int timeout = 20 * 1000;
 
-		// ÀåÄ¡ÀÇ ÆĞÅ¶ Ä¸Ã³¸¦ È°¼ºÈ­ÇÕ´Ï´Ù Pcap.openLive(·ÎÄÃ ³×Æ®¿öÅ© ÀåÄ¡, 65536¹ÙÀÌÆ®, ÇÁ¶ó¹Ì½ºÄí¾î½º ¸ğµå, Å¸ÀÓ¾Æ¿ô, ¿¡·¯ Á¤º¸);
+		// ì¥ì¹˜ì˜ íŒ¨í‚· ìº¡ì²˜ë¥¼ í™œì„±í™”í•©ë‹ˆë‹¤ Pcap.openLive(ë¡œì»¬ ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜, 65536ë°”ì´íŠ¸, í”„ë¼ë¯¸ìŠ¤ì¿ ì–´ìŠ¤ ëª¨ë“œ, íƒ€ì„ì•„ì›ƒ, ì—ëŸ¬ ì •ë³´);
 		Pcap pcap = Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);
 
-		// Pcap °´Ã¼°¡ »ı¼ºµÇÁö ¾ÊÀ¸¸é ¿À·ù ¸Ş¼¼Áö ¹ß»ı
+		// Pcap ê°ì²´ê°€ ìƒì„±ë˜ì§€ ì•Šìœ¼ë©´ ì˜¤ë¥˜ ë©”ì„¸ì§€ ë°œìƒ
 		if (pcap == null) {
-			System.out.println("ÆĞÅ¶ Ä¸Ã³¸¦ À§ÇØ ³×Æ®¿öÅ© ÀåÄ¡¸¦ ¿©´Âµ¥ ½ÇÆĞ ¿À·ù: " + errbuf.toString());
+			System.out.println("íŒ¨í‚· ìº¡ì²˜ë¥¼ ìœ„í•´ ë„¤íŠ¸ì›Œí¬ ì¥ì¹˜ë¥¼ ì—¬ëŠ”ë° ì‹¤íŒ¨ ì˜¤ë¥˜: " + errbuf.toString());
 			return;
 		}
 
-		// IP ÁÖ¼Ò °´Ã¼ »ı¼º
+		// IP ì£¼ì†Œ ê°ì²´ ìƒì„±
 		Ip4 ip = new Ip4();
 
-		// TCP ÁÖ¼Ò °´Ã¼ »ı¼º
+		// TCP ì£¼ì†Œ ê°ì²´ ìƒì„±
 		Tcp tcp = new Tcp();
 
-		// Ä¸Ã³ÇÑ ÆĞÅ¶ÀÇ Çì´õ °´Ã¼ »ı¼º
-		// JMemory.POINTER¸¦ Àü´ŞÇÏ°Ô µÇ´Âµ¥ ÀÌ´Â Çì´õ¸¦ ¸Ş¸ğ¸®ÀÇ Æ¯Á¤ À§Ä¡¿¡ ÇÒ´çÇÏ´Â µ¥ »ç¿ëµÇ´Â JNA(Java Native Access) ¶óÀÌºê·¯¸®ÀÇ Pointer¸¦ ³ªÅ¸³¿
-		// ÆĞÅ¶ Çì´õ¸¦ ¸Ş¸ğ¸®ÀÇ Æ¯Á¤ À§Ä¡¿¡ ÇÒ´çÇÏ¿© »ç¿ë
+		// ìº¡ì²˜í•œ íŒ¨í‚·ì˜ í—¤ë” ê°ì²´ ìƒì„±
+		// JMemory.POINTERë¥¼ ì „ë‹¬í•˜ê²Œ ë˜ëŠ”ë° ì´ëŠ” í—¤ë”ë¥¼ ë©”ëª¨ë¦¬ì˜ íŠ¹ì • ìœ„ì¹˜ì— í• ë‹¹í•˜ëŠ” ë° ì‚¬ìš©ë˜ëŠ” JNA(Java Native Access) ë¼ì´ë¸ŒëŸ¬ë¦¬ì˜ Pointerë¥¼ ë‚˜íƒ€ëƒ„
+		// íŒ¨í‚· í—¤ë”ë¥¼ ë©”ëª¨ë¦¬ì˜ íŠ¹ì • ìœ„ì¹˜ì— í• ë‹¹í•˜ì—¬ ì‚¬ìš©
 		PcapHeader header = new PcapHeader(JMemory.POINTER);
 
-		// ÆĞÅ¶ °ü·Ã ¹öÆÛ »ı¼º
-		// ÆĞÅ¶ °ü·Ã ¹öÆÛ¸¦ ¸Ş¸ğ¸®ÀÇ Æ¯Á¤ À§Ä¡¿¡ ÇÒ´çÇÏ¿© »ç¿ë
+		// íŒ¨í‚· ê´€ë ¨ ë²„í¼ ìƒì„±
+		// íŒ¨í‚· ê´€ë ¨ ë²„í¼ë¥¼ ë©”ëª¨ë¦¬ì˜ íŠ¹ì • ìœ„ì¹˜ì— í• ë‹¹í•˜ì—¬ ì‚¬ìš©
 		JBuffer buf = new JBuffer(JMemory.POINTER);
 
-		// PCAPÀÇ µ¥ÀÌÅÍ ¸µÅ© Å¸ÀÔÀ» JnetPcapÀÇ ÇÁ·ÎÅäÄİ ID°ªÀ¸·Î ¸ÅÇÎ
+		// PCAPì˜ ë°ì´í„° ë§í¬ íƒ€ì…ì„ JnetPcapì˜ í”„ë¡œí† ì½œ IDê°’ìœ¼ë¡œ ë§¤í•‘
 		int id = JRegistry.mapDLTToId(pcap.datalink());
 
-		// ½Ã°£ Á¤º¸ ¹®ÀÚ¿­ Çü½Ä ÁöÁ¤
+		// ì‹œê°„ ì •ë³´ ë¬¸ìì—´ í˜•ì‹ ì§€ì •
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		String filePath = "C:\\data\\Local_AllPacket_Dump.txt";// ÇØ´ç ÆÄÀÏ À§Ä¡¿¡ ÅØ½ºÆ® ÆÄÀÏ »ı¼º
-		File file = new File(filePath); // File °´Ã¼ »ı¼º
-		if (!file.exists()) { // ÆÄÀÏÀÌ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é ÆÄÀÏ »ı¼º
+		String filePath = "C:\\data\\Local_AllPacket_Dump.txt";// í•´ë‹¹ íŒŒì¼ ìœ„ì¹˜ì— í…ìŠ¤íŠ¸ íŒŒì¼ ìƒì„±
+		File file = new File(filePath); // File ê°ì²´ ìƒì„±
+		if (!file.exists()) { // íŒŒì¼ì´ ì¡´ì¬í•˜ì§€ ì•Šìœ¼ë©´ íŒŒì¼ ìƒì„±
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
@@ -113,56 +113,56 @@ public class localThread extends Thread {
 			}
 		}
 
-		// BufferedWriter »ı¼º
+		// BufferedWriter ìƒì„±
 		BufferedWriter writer = null;
 		try {
-			writer = new BufferedWriter(new FileWriter(file, false)); // ÇØ´ç ÆÄÀÏÀÌ ÀÖÀ¸¸é ±âÁ¸ ÆÄÀÏ ³»¿ë Áö¿ì°í µ¤¾î ¾²±â
+			writer = new BufferedWriter(new FileWriter(file, false)); // í•´ë‹¹ íŒŒì¼ì´ ìˆìœ¼ë©´ ê¸°ì¡´ íŒŒì¼ ë‚´ìš© ì§€ìš°ê³  ë®ì–´ ì“°ê¸°
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		System.out.println(searchPort + "Æ÷Æ® ·ÎÄÃ ½ºÄµ ½ÃÀÛ");
+		System.out.println(searchPort + "í¬íŠ¸ ë¡œì»¬ ìŠ¤ìº” ì‹œì‘");
 		
-		// µ¥ÀÌÅÍ¸¦ º¸³»´Â À§Ä¡¸¦ ±¸ºĞÁş±â À§ÇØ 2°³ÀÇ °á°ú·Î ³ª´®
-		StringBuffer sourceResult = new StringBuffer(); // sourceResult´Â µ¥ÀÌÅÍ¸¦ º¸³¾¶§ ÇØ´ç µ¥ÀÌÅÍ ³»¿ë
-		StringBuffer destinationResult = new StringBuffer(); // destinationResult´Â µ¥ÀÌÅÍ¸¦ ¹ŞÀ»¶§ ÇØ´ç µ¥ÀÌÅÍÀÇ ³»¿ë
+		// ë°ì´í„°ë¥¼ ë³´ë‚´ëŠ” ìœ„ì¹˜ë¥¼ êµ¬ë¶„ì§“ê¸° ìœ„í•´ 2ê°œì˜ ê²°ê³¼ë¡œ ë‚˜ëˆ”
+		StringBuffer sourceResult = new StringBuffer(); // sourceResultëŠ” ë°ì´í„°ë¥¼ ë³´ë‚¼ë•Œ í•´ë‹¹ ë°ì´í„° ë‚´ìš©
+		StringBuffer destinationResult = new StringBuffer(); // destinationResultëŠ” ë°ì´í„°ë¥¼ ë°›ì„ë•Œ í•´ë‹¹ ë°ì´í„°ì˜ ë‚´ìš©
 
-		// ¿À·ù°¡ ¹ß»ıÇÏÁö ¾Ê´Â ÇÑ °è¼ÓÇØ¼­ ´ÙÀ½ ÆĞÅ¶À» ÀÔ·Â¹ŞÀ½
+		// ì˜¤ë¥˜ê°€ ë°œìƒí•˜ì§€ ì•ŠëŠ” í•œ ê³„ì†í•´ì„œ ë‹¤ìŒ íŒ¨í‚·ì„ ì…ë ¥ë°›ìŒ
 		while ( pcap.nextEx(header, buf) == Pcap.NEXT_EX_OK) {
-			PcapPacket packet = new PcapPacket(header, buf); // °¡Á®¿Â ÆĞÅ¶ Çì´õ¿Í µ¥ÀÌÅÍ·Î packet °´Ã¼ »ı¼º
-			packet.scan(id); // scan ¸Ş¼­µå´Â ÆĞÅ¶ÀÇ ³»ºÎ µ¥ÀÌÅÍ¸¦ ÀĞ°í ºĞ¼®ÇÏ¿© ÇÁ·ÎÅäÄİÀÇ Æ¯Á¤ ÇÊµå³ª Æ¯Â¡À» ½Äº°.
+			PcapPacket packet = new PcapPacket(header, buf); // ê°€ì ¸ì˜¨ íŒ¨í‚· í—¤ë”ì™€ ë°ì´í„°ë¡œ packet ê°ì²´ ìƒì„±
+			packet.scan(id); // scan ë©”ì„œë“œëŠ” íŒ¨í‚·ì˜ ë‚´ë¶€ ë°ì´í„°ë¥¼ ì½ê³  ë¶„ì„í•˜ì—¬ í”„ë¡œí† ì½œì˜ íŠ¹ì • í•„ë“œë‚˜ íŠ¹ì§•ì„ ì‹ë³„.
 
 			if (packet.hasHeader(tcp)) {
 				if (tcp.source() == searchPort || tcp.destination() == searchPort) {
-					Date date = new Date(packet.getCaptureHeader().timestampInMillis()); // ÆĞÅ¶ÀÇ ½Ã°£ Á¤º¸¸¦ ÃÊ´ÜÀ§·Î °¡Á®¿È
-					String nowTime = sdf1.format(date); // ÃÊ ´ÜÀ§¸¦ ³¯Â¥ Çü½Ä¿¡ ¸ÂÃç ¹®ÀÚ¿­·Î º¯È¯
+					Date date = new Date(packet.getCaptureHeader().timestampInMillis()); // íŒ¨í‚·ì˜ ì‹œê°„ ì •ë³´ë¥¼ ì´ˆë‹¨ìœ„ë¡œ ê°€ì ¸ì˜´
+					String nowTime = sdf1.format(date); // ì´ˆ ë‹¨ìœ„ë¥¼ ë‚ ì§œ í˜•ì‹ì— ë§ì¶° ë¬¸ìì—´ë¡œ ë³€í™˜
 
-					byte[] tcp_payloadData = tcp.getPayload();// TCP ÆĞÅ¶¿¡¼­ÀÇ payload¸¦ °¡Á®¿È (¹ÙÀÌÆ® ÇüÅÂ)
-					String payloadData = DatatypeConverter.printHexBinary(tcp_payloadData);// 16Áø¼öÇüÅÂ¸¦ ÇÏ³ªÀÇ ¹®ÀÚ¿­·Î º¯È¯
-					String asciiString = hexToAscii(payloadData);// ÇØ´ç ¹®ÀÚ¿­À» ¾Æ½ºÅ° ÄÚµå·Î º¯È¯½ÃÄÑÁÖ´Â ¸Ş¼Òµå hexToAscii()
+					byte[] tcp_payloadData = tcp.getPayload();// TCP íŒ¨í‚·ì—ì„œì˜ payloadë¥¼ ê°€ì ¸ì˜´ (ë°”ì´íŠ¸ í˜•íƒœ)
+					String payloadData = DatatypeConverter.printHexBinary(tcp_payloadData);// 16ì§„ìˆ˜í˜•íƒœë¥¼ í•˜ë‚˜ì˜ ë¬¸ìì—´ë¡œ ë³€í™˜
+					String asciiString = hexToAscii(payloadData);// í•´ë‹¹ ë¬¸ìì—´ì„ ì•„ìŠ¤í‚¤ ì½”ë“œë¡œ ë³€í™˜ì‹œì¼œì£¼ëŠ” ë©”ì†Œë“œ hexToAscii()
 
 					packet.hasHeader(ip);
 
-					// Ãâ¹ß Æ÷Æ®°¡ searchPortÀÌ¸é Jmeter¿¡¼­ SMEX·Î È­»ìÇ¥ Ç¥½Ã(Jmeter°¡ searchPortÀÌ±â ¶§¹®)
+					// ì¶œë°œ í¬íŠ¸ê°€ searchPortì´ë©´ Jmeterì—ì„œ SMEXë¡œ í™”ì‚´í‘œ í‘œì‹œ(Jmeterê°€ searchPortì´ê¸° ë•Œë¬¸)
 					if (tcp.source() == searchPort) {
 						if (sourceResult.length() == 0) {
-							sourceResult.append("============ \n" + "½Ã°£ : " + nowTime + "\n" + "Jmeter -> SMEX\n"
-									+ "Ãâ¹ßÁö IP ÁÖ¼Ò : " + FormatUtils.ip(ip.source()) + "\n" + "µµÂøÁö IP ÁÖ¼Ò : "
-									+ FormatUtils.ip(ip.destination()) + "\n" + "Ãâ¹ßÁö Port ÁÖ¼Ò : " + tcp.source() + "\n"
-									+ "µµÂøÁö Port ÁÖ¼Ò : " + tcp.destination() + "\n" + "µ¥ÀÌÅÍ : \n");
+							sourceResult.append("============ \n" + "ì‹œê°„ : " + nowTime + "\n" + "Jmeter -> SMEX\n"
+									+ "ì¶œë°œì§€ IP ì£¼ì†Œ : " + FormatUtils.ip(ip.source()) + "\n" + "ë„ì°©ì§€ IP ì£¼ì†Œ : "
+									+ FormatUtils.ip(ip.destination()) + "\n" + "ì¶œë°œì§€ Port ì£¼ì†Œ : " + tcp.source() + "\n"
+									+ "ë„ì°©ì§€ Port ì£¼ì†Œ : " + tcp.destination() + "\n" + "ë°ì´í„° : \n");
 						} else {
 							sourceResult.append(asciiString);
 						}
 					}
 
-					// µµÂø Æ÷Æ®°¡ searchPortÀÌ¸é SMEX¿¡¼­ Jmeter·Î È­»ìÇ¥ Ç¥½Ã(Jmeter°¡ searchPortÀÌ±â ¶§¹®)
+					// ë„ì°© í¬íŠ¸ê°€ searchPortì´ë©´ SMEXì—ì„œ Jmeterë¡œ í™”ì‚´í‘œ í‘œì‹œ(Jmeterê°€ searchPortì´ê¸° ë•Œë¬¸)
 					if (tcp.destination() == searchPort) {
 						if (destinationResult.length() == 0) {
-							destinationResult.append("============ \n" + "½Ã°£ : " + nowTime + "\n" + "SMEX -> Jmeter\n"
-									+ "Ãâ¹ßÁö IP ÁÖ¼Ò : " + FormatUtils.ip(ip.source()) + "\n" + "µµÂøÁö IP ÁÖ¼Ò : "
-									+ FormatUtils.ip(ip.destination()) + "\n" + "Ãâ¹ßÁö Port ÁÖ¼Ò : " + tcp.source() + "\n"
-									+ "µµÂøÁö Port ÁÖ¼Ò : " + tcp.destination() + "\n" + "µ¥ÀÌÅÍ : \n");
+							destinationResult.append("============ \n" + "ì‹œê°„ : " + nowTime + "\n" + "SMEX -> Jmeter\n"
+									+ "ì¶œë°œì§€ IP ì£¼ì†Œ : " + FormatUtils.ip(ip.source()) + "\n" + "ë„ì°©ì§€ IP ì£¼ì†Œ : "
+									+ FormatUtils.ip(ip.destination()) + "\n" + "ì¶œë°œì§€ Port ì£¼ì†Œ : " + tcp.source() + "\n"
+									+ "ë„ì°©ì§€ Port ì£¼ì†Œ : " + tcp.destination() + "\n" + "ë°ì´í„° : \n");
 						} else {
 							destinationResult.append(asciiString);
 						}
@@ -171,11 +171,11 @@ public class localThread extends Thread {
 			}
 		}
 		
-		if(pcap != null) { // timeoutÀÌ µÇ¾úÀ»¶§´Â ÀÌ¹Ì pcapÀÌ ´İÇô ÀÖ¾î¼­ ¶Ç pcapÀ» ´İ´Â °ÍÀ» ¹æÁö
+		if(pcap != null) { // timeoutì´ ë˜ì—ˆì„ë•ŒëŠ” ì´ë¯¸ pcapì´ ë‹«í˜€ ìˆì–´ì„œ ë˜ pcapì„ ë‹«ëŠ” ê²ƒì„ ë°©ì§€
 			pcap.close();
 		}
 		
-		System.out.println(searchPort + "Æ÷Æ® ·ÎÄÃ ½ºÄµ Á¾·á");
+		System.out.println(searchPort + "í¬íŠ¸ ë¡œì»¬ ìŠ¤ìº” ì¢…ë£Œ");
 		System.out.println(sourceResult.toString());
 		System.out.println(destinationResult.toString());
 		try {
